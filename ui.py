@@ -19,7 +19,7 @@ class UI():
         self.root.geometry("550x550")
         self.root.resizable(False, False)
         self.root.title("WhatsApp Status")
-        self.root.iconbitmap("Project\logo.ico")
+        self.root.iconbitmap("logo.ico")
         
         # Create a frame for the title and login button
         self.header_frame = tk.Frame(self.root, bg="#25D366")
@@ -35,7 +35,7 @@ class UI():
 
         # Create a login button
         self.style = ttk.Style()
-        self.style.configure("Login.TButton", padding=3, relief="solid", borderwidth=3, font=("Helvetica", 12), background="#25D366")
+        self.style.configure("Login.TButton", padding=3, relief="solid", borderwidth=3, font=("Helvetica", 12), bg="#F7F7F7", bd=5)
         self.login_button = ttk.Button(self.header_frame, text="Login", style="Login.TButton", command=lambda: self.login())
         self.login_button.pack(side=tk.RIGHT)
 
@@ -58,7 +58,7 @@ class UI():
         self.message_scrollbar.config(command=self.message_list.yview)
 
         # Create a frame for the input field
-        self.input_frame = tk.Frame(self.frame, bg="#ece5dd")
+        self.input_frame = tk.Frame(self.frame, bg="#F7F7F7", bd=5)
         self.input_frame.pack(fill=tk.X, pady=10)
 
         # Create an entry widget for the input field
@@ -69,7 +69,8 @@ class UI():
         self.input_entry.bind("<Return>", self.add_message)
        
         self.style = ttk.Style()
-        self.style.configure("Round.TButton", padding=3, relief="solid", borderwidth=3, font=("Helvetica", 12), shape="circle")
+        self.style.configure("Round.TButton", padding=3, relief="solid", borderwidth=0,
+                              font=("Helvetica", 12), shape="circle",background="#F7F7F7", corner_radius=10)
         
         self.upload_button = ttk.Button(self.input_frame, text="Upload File", style="Round.TButton", command=self.upload_file)
         self.downloadall_button = ttk.Button(self.input_frame, text="Invalid Only", style="Round.TButton", command=self.download_invalid)
