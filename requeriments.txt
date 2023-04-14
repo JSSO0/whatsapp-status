@@ -1,3 +1,15 @@
 pandas
+python -m pip install pandas
+pip install --upgrade pandas
+
 selenium
+pip install selenium
+pip install --upgrade selenium
+
 webdriver_manager
+pip install webdriver-manager
+pip install --upgrade webdriver_manager
+
+openpyxl
+pip install openpyxl
+

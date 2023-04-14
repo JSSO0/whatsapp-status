@@ -50,13 +50,14 @@ class GetStatus():
 
     def seturl(self):
         self.url = f"https://web.whatsapp.com/send/?phone={self.id}&text&type=phone_number&app_absent=0"
-        
+   
     def test(self):
             self.count = 3
             self.time = self.count * 5
             try:
                 # Check if it is valid, if there is the "Type a message"
                 self.a = WebDriverWait(self.driver, self.time).until(EC.visibility_of_element_located((By.XPATH, '/html/body/div[1]/div/div/div[5]/div/footer/div[1]/div/span[2]/div/div[2]/div[1]/div/div[1]'))).get_attribute("title")
+                #/html/body/div[1]/div/div/div[5]/div/footer/div[1]/div/span[2]/div/div[2]/div[1]/div/div[2]
             except TimeoutException: 
                 try:
                     # Check if it is invalid, if there is the "Phone number shared via url is invalid."
@@ -76,9 +77,9 @@ class GetStatus():
                 self.result = "Error."
             else:
                 if(self.a == self.checkerTextValid):
-                    self.result = "Instabilidade sistêmica na Meta."
+                    self.result = "Número tem whatsApp"
                 else:
-                    self.result = "Error."
+                    self.result = "Sucesso"
             finally:
                 print(self.result)
                 self.count = 3
@@ -89,7 +90,7 @@ class GetStatus():
         self.options.add_argument('headless'); # not working?
         self.waitText = "Starting chat" # not being used
         self.checkerTextInvalid = "Phone number shared via url is invalid."
-        self.checkerTextValid = "Type a message"
+        self.checkerTextValid = "Type a message" or "Mensagem"
         self.id = id
 
         self.seturl()
