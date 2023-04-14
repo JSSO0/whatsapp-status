@@ -67,19 +67,19 @@ class GetStatus():
                         self.count -= 1
                         self.test(self)
                 except:
-                    self.result = "Error."
+                    self.result = "Error." or "Erro"
                 else:
                     if(self.a == self.checkerTextInvalid):
-                        self.result = "Não tem WhatsApp"
+                        self.result = "Invalid Number."
                     else:
-                        self.result = "Error."
+                        self.result = "Error." or "Erro"
             except:
-                self.result = "Error."
+                self.result = "Error." or "Erro"
             else:
                 if(self.a == self.checkerTextValid):
-                    self.result = "Número tem whatsApp"
+                    self.result = "Valid Number."
                 else:
-                    self.result = "Sucesso"
+                    self.result = "Error."
             finally:
                 print(self.result)
                 self.count = 3
@@ -90,7 +90,7 @@ class GetStatus():
         self.options.add_argument('headless'); # not working?
         self.waitText = "Starting chat" # not being used
         self.checkerTextInvalid = "Phone number shared via url is invalid."
-        self.checkerTextValid = "Type a message" or "Mensagem"
+        self.checkerTextValid = "Type a message"
         self.id = id
 
         self.seturl()
