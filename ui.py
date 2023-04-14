@@ -21,8 +21,17 @@ class UI():
         self.root.geometry("550x550")
         self.root.resizable(False, False)
         self.root.title("WhatsApp Status")
-        self.root.iconbitmap("Project\logo.ico")
+
+        # try to set the window icon
+        try:
+            self.root.iconbitmap("logo.ico")
+        except:
+            try:
+                self.root.iconbitmap("Project\logo.ico")
+            except:
+                pass
         
+
         # Create a frame for the title and login button
         self.header_frame = tk.Frame(self.root, bg="#25D366")
         self.header_frame.pack(side=tk.TOP, fill=tk.X)
@@ -38,8 +47,8 @@ class UI():
         # Create a login button
         self.style = ttk.Style()
         self.style.configure("Login.TButton", padding=3, relief="solid", borderwidth=3, font=("Helvetica", 12), background="#25D366")
-        self.login_button = ttk.Button(self.header_frame, text="Login", style="Login.TButton", command=lambda: self.login())
-        self.login_button.pack(side=tk.RIGHT)
+        #self.login_button = ttk.Button(self.header_frame, text="Github repository", style="Login.TButton", command=lambda: self.login())
+        #self.login_button.pack(side=tk.RIGHT)
 
         # Create a hyperlink label between the two buttons
         self.link_label = ttk.Button(self.header_frame, text="Github repository", style="Login.TButton")
