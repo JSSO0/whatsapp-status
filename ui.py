@@ -99,7 +99,7 @@ class UI():
         
         self.resultCSV = {}
 
-        for n in data_list:
+        for index, n in enumerate(data_list, 1):
 
             isDuplicate = False
             duplicateIndex = 0
@@ -110,7 +110,7 @@ class UI():
                 # get the index of the duplicate value)
                 duplicateIndex = list(self.resultCSV.keys()).index(n) 
 
-            self.message_list.insert(tk.END, f"Checking {n}...")
+            self.message_list.insert(tk.END, f"{index} - Checking {n}...")
             self.message_list.see(tk.END)
             self.root.update()
 
