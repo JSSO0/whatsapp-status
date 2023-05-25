@@ -79,7 +79,7 @@ class GetStatus():
                 if(self.a == self.checkerTextValid):
                     self.result = "Valid Number."
                 else:
-                    self.result = "Error."
+                    self.result = "Sucesso."
             finally:
                 print(self.result)
                 self.count = 3

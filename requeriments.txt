@@ -13,3 +13,5 @@ pip install --upgrade webdriver_manager
 openpyxl
 pip install openpyxl
 
+Pillow
+pip install pillow
