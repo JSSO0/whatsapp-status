@@ -110,7 +110,7 @@ class UI():
                 # get the index of the duplicate value)
                 duplicateIndex = list(self.resultCSV.keys()).index(n) 
 
-            self.message_list.insert(tk.END, f"{index} - Checking {n}...")
+            self.message_list.insert(tk.END, f"{index} - Validando {n}...")
             self.message_list.see(tk.END)
             self.root.update()
 
@@ -128,9 +128,9 @@ class UI():
         self.driver.login()
 
         self.message_list.insert(tk.END, "")
-        self.message_list.insert(tk.END, f"Your verification is done for {len(data_list)} numbers.")
+        self.message_list.insert(tk.END, f"Sua verificação terminou para {len(data_list)} numeros.")
         self.message_list.insert(tk.END, "")
-        self.message_list.insert(tk.END, "You can now download the results.")
+        self.message_list.insert(tk.END, "Agora você pode baixar os resultados.")
         self.message_list.see(tk.END)
         self.root.update()
 
@@ -196,12 +196,15 @@ class UI():
         # For Brazil here it's 11, you can remove it but helps find errors beforehand. (can also be added a country code and use it)
         id = str(id)
         if(len(id) < 11): 
-            self.message_list.insert(tk.END, f"{id}: ERROR! Not enough digits, verify the number and try again.")
-        elif(len(id) > 11):
-            self.message_list.insert(tk.END, f"{id}: ERROR! Too many digits, verify the number and try again.")
-        else:
+            self.message_list.insert(tk.END, f"{id}: ERRO! Não há dígitos suficientes, verifique o número e tente novamente.")
+        #elif(len(id) > 11):
+         #   self.message_list.insert(tk.END, f"{id}: ERRO! Muitos dígitos, verifique o número e tente novamente.")
+        elif(len(id)==11):
             
             number = "55" + id
+            status = self.driver.run(number)
+        elif(len(id)==13):
+            number =  id
             status = self.driver.run(number)
 
         return status

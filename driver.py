@@ -70,14 +70,14 @@ class GetStatus():
                     self.result = "Error." or "Erro"
                 else:
                     if(self.a == self.checkerTextInvalid):
-                        self.result = "Invalid Number."
+                        self.result = "Numero Invalido"
                     else:
                         self.result = "Error." or "Erro"
             except:
                 self.result = "Error." or "Erro"
             else:
                 if(self.a == self.checkerTextValid):
-                    self.result = "Valid Number."
+                    self.result = "Numero valido."
                 else:
                     self.result = "Sucesso."
             finally:
