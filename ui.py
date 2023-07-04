@@ -200,12 +200,16 @@ class UI():
         #elif(len(id) > 11):
          #   self.message_list.insert(tk.END, f"{id}: ERRO! Muitos dígitos, verifique o número e tente novamente.")
         elif(len(id)==11):
-            
             number = "55" + id
             status = self.driver.run(number)
         elif(len(id)==13):
             number =  id
             status = self.driver.run(number)
+        elif(len(id))==12:
+            number =  id
+            status = self.driver.run(number)
+        elif(len(id) > 13): 
+            self.message_list.insert(tk.END, f"{id}: ERRO! Há Muitos digitos, verifique novamente!")
 
         return status
 
