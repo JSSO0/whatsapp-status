@@ -196,7 +196,8 @@ class UI():
         # For Brazil here it's 11, you can remove it but helps find errors beforehand. (can also be added a country code and use it)
         id = str(id)
         if(len(id) < 11): 
-            self.message_list.insert(tk.END, f"{id}: ERRO! Não há dígitos suficientes, verifique o número e tente novamente.")
+            number = "55" + id
+            status = self.driver.run(number)
         #elif(len(id) > 11):
          #   self.message_list.insert(tk.END, f"{id}: ERRO! Muitos dígitos, verifique o número e tente novamente.")
         elif(len(id)==11):
@@ -209,8 +210,8 @@ class UI():
             number =  id
             status = self.driver.run(number)
         elif(len(id) > 13): 
-            self.message_list.insert(tk.END, f"{id}: ERRO! Há Muitos digitos, verifique novamente!")
-
+            number = "55" + id
+            status = self.driver.run(number)
         return status
 
     def login(self):
