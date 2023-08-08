@@ -14,101 +14,7 @@ from selenium.common.exceptions import NoSuchElementException
 
 import requests
 
-class GetStatus():
-    def __init__(self) -> None:
-        self.options = webdriver.ChromeOptions()
-        self.options.add_argument('--window-size=900,600')
-        self.options.add_argument("--disable-extensions")
-        self.options.add_argument("--disable-gpu")
-        self.options.add_argument("--disable-dev-shm-usage")
-        self.options.add_argument("--no-sandbox")
-        self.options.add_argument("start-maximized")
-        self.options.add_argument("disable-infobars")
-        self.options.add_argument("--disable-browser-side-navigation")
 
-        self.cookies_file = "whatsapp_cookies.pkl"
-
-        if os.path.exists(self.cookies_file):
-            with open(self.cookies_file, "rb") as f:
-                self.cookies = pickle.load(f)
-            for cookie in self.cookies:
-                self.options.add_argument(f"--cookie={cookie['name']}={cookie['value']}")
-
-        self.driver = webdriver.Chrome(ChromeDriverManager().install(), options=self.options)
-        self.driver.get("https://web.whatsapp.com/")
-
-    def save_cookies(self):
-        cookies = self.driver.get_cookies()
-        with open(self.cookies_file, "wb") as f:
-            pickle.dump(cookies, f)
-
-    def seturl(self):
-        self.url = f"https://web.whatsapp.com/send/?phone={self.id}&text&type=phone_number&app_absent=0"
-
-    def test(self):
-        self.count = 3
-        self.time = self.count * 5
-        self.driver.implicitly_wait(5)  # Defina um tempo de espera implícita
-
-        try:
-            valid_element = self.driver.find_element(By.XPATH, "//div[@title='Type a message']")
-            self.a = valid_element.get_attribute("title")
-        except NoSuchElementException:
-            try:
-                invalid_element = self.driver.find_element(By.XPATH, "//div[contains(text(), 'Phone number shared via url is invalid.')]")
-                self.a = invalid_element.get_attribute("innerHTML")
-            except NoSuchElementException:
-                if self.count > 1:
-                    self.count -= 1
-                    self.test()
-                else:
-                    self.result = "Erro."
-            else:
-                if self.a == self.checkerTextInvalid:
-                    self.result = "Número Inválido"
-                else:
-                    self.result = "Erro."
-        else:
-            if self.a == self.checkerTextValid:
-                self.result = "Número Válido."
-            else:
-                self.result = "Sucesso."
-
-        print(self.result)
-        self.count = 3
-
-    def run(self, id):
-        self.options.add_argument('headless')
-        self.checkerTextInvalid = "Phone number shared via url is invalid."
-        self.checkerTextValid = "Type a message"
-        self.id = id
-
-        self.seturl()
-        self.driver.get(self.url)
-
-        self.test()
-
-        return self.result
-        
-    def login(self):
-        self.driver.get("https://web.whatsapp.com")
-
-    def github(self):
-        self.driver.get("https://github.com/soaresgabe/whatsapp-status")
-
-    @staticmethod
-    def check_login_status(driver):
-        try:
-            chat_list = WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.CSS_SELECTOR, "div._3j8Pd")))
-            return True
-        except:
-            return False
-        else:
-            self.driver.close()
-            self.chrome_options.add_argument('--headless')
-            driver.execute_script("window.open('https://web.whatsapp.com');")
-
-'''
 class GetStatus():
     def __init__(self) -> None:
         self.options = webdriver.ChromeOptions()
@@ -143,7 +49,7 @@ class GetStatus():
 
     def test(self):
             self.count = 3
-            self.time = self.count * 5
+            self.time = self.count * 2
             try:
                 self.a = WebDriverWait(self.driver, self.time).until(EC.visibility_of_element_located((By.XPATH, '/html/body/div[1]/div/div/div[5]/div/footer/div[1]/div/span[2]/div/div[2]/div[1]/div/div[1]'))).get_attribute("title")
                 #/html/body/div[1]/div/div/div[5]/div/footer/div[1]/div/span[2]/div/div[2]/div[1]/div/div[2]
@@ -207,6 +113,3 @@ class GetStatus():
             self.chrome_options.add_argument('--headless')
             driver.execute_script("window.open('https://web.whatsapp.com');")
 
-   
-
-'''
