@@ -77,18 +77,24 @@ class UI():
                 isDuplicate, duplicateIndex = False, 0
 
                 if n in self.resultCSV:
-                    isDuplicate = True
-                    duplicateIndex = list(self.resultCSV.keys()).index(n)
+                   isDuplicate = True
+                   duplicateIndex = list(self.resultCSV.keys()).index(n)
 
-                self.message_list.insert(tk.END, f"{index} - Validando {n}")
+                self.message_list.insert(tk.END, f"{index} - Validando {n}...")
                 self.message_list.see(tk.END)
                 self.root.update()
 
-                status = self.check(n) if not isDuplicate else "Número duplicado."
+                try:
+                    status = self.check(n) if not isDuplicate else "Número duplicado."
+                except Exception as e:
+                    print(f"Erro ao validar {n}: {e}")
+                    status = "Erro ao validar"
+                
                 self.resultCSV[duplicateIndex] = status
                 self.resultCSV[n] = status
-                print(self.resultCSV[n])
 
+                self.message_list.insert(tk.END, status)
+                self.message_list.see(tk.END)
                 self.root.update()
 
             self.driver.login()

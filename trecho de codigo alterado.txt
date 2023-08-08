@@ -1,0 +1,17 @@
+            for index, n in enumerate(data_list, 1):
+                isDuplicate, duplicateIndex = False, 0
+
+                if n in self.resultCSV:
+                    isDuplicate = True
+                    duplicateIndex = list(self.resultCSV.keys()).index(n)
+
+                self.message_list.insert(tk.END, f"{index} - Validando {n}")
+                self.message_list.see(tk.END)
+                self.root.update()
+
+                status = self.check(n) if not isDuplicate else "Número duplicado."
+                self.resultCSV[duplicateIndex] = status
+                self.resultCSV[n] = status
+                print(self.resultCSV[n])
+
+                self.root.update()
