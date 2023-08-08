@@ -1,17 +1,11 @@
-pandas
-python -m pip install pandas
-pip install --upgrade pandas
+pip uninstall selenium
+pip uninstall openpyxl
+pip uninstall pillow
+pip uninstall pandas
+pip uninstall webdriver-manager
 
-selenium
-pip install selenium
-pip install --upgrade selenium
-
-webdriver_manager
-pip install webdriver-manager
-pip install --upgrade webdriver_manager
-
-openpyxl
-pip install openpyxl
-
-Pillow
-pip install pillow
+pip install selenium==4.9.1
+pip install openpyxl==3.1.2
+pip install pillow==9.5.0
+pip install pandas==2.0.3
+pip install webdriver-manager==3.9.1
