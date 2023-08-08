@@ -99,17 +99,13 @@ class UI():
             self.root.update()
 
     def download_all(self):
-            # Verifica se o número de valores a serem atribuídos é menor ou igual ao número de linhas no DataFrame
-            num_values = len(self.resultCSV.values())
-            num_rows = self.data.shape[0]
+            num_rows = self.data.shape[0]  # Obtém o número total de linhas no DataFrame
     
-            if num_values < num_rows:
-            # Adiciona valores vazios para corresponder ao número necessário de linhas
-                num_missing_values = num_rows - num_values
-                for _ in range(num_missing_values):
-                    self.resultCSV[''] = ''
-    
-            self.data['Status'] = list(self.resultCSV.values())
+             # Adiciona os valores ao DataFrame de acordo com o índice das linhas
+            for index, value in enumerate(self.resultCSV.values()):
+                if index < num_rows:
+                  self.data.at[index, 'Status'] = value
+
             file_path = asksaveasfilename(defaultextension='.csv', initialfile='Results.csv')
             self.data.to_csv(file_path, index=False)
 
