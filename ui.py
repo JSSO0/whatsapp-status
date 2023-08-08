@@ -55,6 +55,15 @@ class UI():
         self.input_entry.pack(fill=tk.X, expand=True, padx=5, pady=3)
         self.input_entry.bind("<Return>", self.add_message)
 
+        self.style = ttk.Style()
+        self.style.configure("Round.TButton", padding=3, relief="solid", borderwidth=0, font=("Helvetica", 12), shape="circle", background="#F7F7F7", corner_radius=10)
+
+        self.upload_button = ttk.Button(self.input_frame, text="Upload File", style="Round.TButton", command=self.upload_file)
+        self.downloadall_button = ttk.Button(self.input_frame, text="Download File", style="Round.TButton", command=self.download_all)
+
+        self.upload_button.pack(side=tk.LEFT, pady=1, padx=1)
+        self.downloadall_button.pack(side=tk.RIGHT, pady=1, padx=1)
+        
         self.style.configure("Round.TButton", padding=3, relief="solid", borderwidth=0, font=("Helvetica", 12), shape="circle", background="#F7F7F7", corner_radius=10)
         self.upload_button = ttk.Button(self.input_frame, text="Upload File", style="Round.TButton", command=self.upload_file)
         self.downloadall_button = ttk.Button(self.input_frame, text="Download File", style="Round.TButton", command=self.download_all)
