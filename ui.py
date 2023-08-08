@@ -35,8 +35,8 @@ class UI():
         self.title_label = tk.Label(self.header_frame, text="WhatsApp Status", font=("Helvetica", 16), fg="white", bg="#25D366")
         self.title_label.pack(side=tk.LEFT, expand=True)
 
-        # Create a frame for the message list
-        self.message_frame = tk.Frame(self.frame, bg="white")
+    def create_message_list(self):
+        self.message_frame = tk.Frame(self.root, bg="white")
         self.message_frame.pack(fill=tk.BOTH, expand=True)
 
         self.message_scrollbar = tk.Scrollbar(self.message_frame)
@@ -80,7 +80,7 @@ class UI():
                     isDuplicate = True
                     duplicateIndex = list(self.resultCSV.keys()).index(n)
 
-                self.message_list.insert(tk.END, f"{index} - Validando {n}...")
+                self.message_list.insert(tk.END, f"{index} - Validando {n}")
                 self.message_list.see(tk.END)
                 self.root.update()
 
@@ -94,7 +94,7 @@ class UI():
             self.driver.login()
 
             self.message_list.insert(tk.END, "", f"Sua verificação terminou para {len(data_list)} numeros.", "")
-            self.message_list.insert(tk.END, "Agora você pode baixar os resultados.")
+            self.message_list.insert(tk.END, "Clique em Download para baixar os resultados")
             self.message_list.see(tk.END)
             self.root.update()
 
@@ -156,6 +156,6 @@ class UI():
             
             status = self.driver.run(number)
         else:
-            status = "Número inválido"
+            status = "Número inválido cheque novamente"
         
         return status
