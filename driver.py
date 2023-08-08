@@ -17,6 +17,11 @@ import requests
 class GetStatus():
     def __init__(self) -> None:
         self.options = webdriver.ChromeOptions()
+        self.setup_driver_options()
+        self.setup_cookies()
+        self.setup_webdriver()
+
+    def setup_driver_options(self):
         self.options.add_argument('--window-size=900,600')
         self.options.add_argument("--disable-extensions")
         self.options.add_argument("--disable-gpu")
@@ -26,14 +31,15 @@ class GetStatus():
         self.options.add_argument("disable-infobars")
         self.options.add_argument("--disable-browser-side-navigation")
 
+    def setup_cookies(self):
         self.cookies_file = "whatsapp_cookies.pkl"
-
         if os.path.exists(self.cookies_file):
             with open(self.cookies_file, "rb") as f:
                 self.cookies = pickle.load(f)
-            for cookie in self.cookies:
-                self.options.add_argument(f"--cookie={cookie['name']}={cookie['value']}")
+                for cookie in self.cookies:
+                    self.options.add_argument(f"--cookie={cookie['name']}={cookie['value']}")
 
+    def setup_webdriver(self):
         self.driver = webdriver.Chrome(ChromeDriverManager().install(), options=self.options)
         self.driver.get("https://web.whatsapp.com/")
 
@@ -47,8 +53,7 @@ class GetStatus():
 
     def test(self):
         self.count = 3
-        self.time = self.count * 5
-        self.driver.implicitly_wait(5)  # Defina um tempo de espera implícita
+        self.driver.implicitly_wait(5)
 
         try:
             valid_element = self.driver.find_element(By.XPATH, "//div[@title='Type a message']")
@@ -103,11 +108,6 @@ class GetStatus():
             return True
         except:
             return False
-        else:
-            self.driver.close()
-            self.chrome_options.add_argument('--headless')
-            driver.execute_script("window.open('https://web.whatsapp.com');")
-
 '''
 class GetStatus():
     def __init__(self) -> None:
