@@ -35,8 +35,8 @@ class UI():
         self.title_label = tk.Label(self.header_frame, text="WhatsApp Status", font=("Helvetica", 16), fg="white", bg="#25D366")
         self.title_label.pack(side=tk.LEFT, expand=True)
 
-    def create_message_list(self):
-        self.message_frame = tk.Frame(self.root, bg="white")
+        # Create a frame for the message list
+        self.message_frame = tk.Frame(self.frame, bg="white")
         self.message_frame.pack(fill=tk.BOTH, expand=True)
 
         self.message_scrollbar = tk.Scrollbar(self.message_frame)
