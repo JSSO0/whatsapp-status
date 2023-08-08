@@ -13,25 +13,25 @@ import time
 class UI():
     
     def __init__(self):        
-        # Create the main window
         self.root = tk.Tk()
         self.driver = GetStatus()
-        
-        # Set the window size and title
+
         self.root.geometry("550x550")
         self.root.resizable(False, False)
         self.root.title("WhatsApp Status")
         self.root.iconbitmap("Project\logo.ico")
-        
-        # Create a frame for the title and login button
+
+        self.create_ui_elements()
+
+    def create_ui_elements(self):
+        self.create_header_frame()
+        self.create_message_list()
+        self.create_input_frame()
+
+    def create_header_frame(self):
         self.header_frame = tk.Frame(self.root, bg="#25D366")
         self.header_frame.pack(side=tk.TOP, fill=tk.X)
 
-        # Create a frame for the UI elements
-        self.frame = tk.Frame(self.root, bg="#25D366", padx=2)
-        self.frame.pack(fill=tk.BOTH, expand=True)
-
-        # Create a label for the title text
         self.title_label = tk.Label(self.header_frame, text="WhatsApp Status", font=("Helvetica", 16), fg="white", bg="#25D366")
         self.title_label.pack(side=tk.LEFT, expand=True)
 
@@ -39,198 +39,123 @@ class UI():
         self.message_frame = tk.Frame(self.frame, bg="white")
         self.message_frame.pack(fill=tk.BOTH, expand=True)
 
-        # Create a scrollbar for the message list
         self.message_scrollbar = tk.Scrollbar(self.message_frame)
         self.message_scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
 
-        # Create a listbox for the messages
         self.message_list = tk.Listbox(self.message_frame, yscrollcommand=self.message_scrollbar.set)
-
-        # Pack the message listbox and make it fill the frame
         self.message_list.pack(fill=tk.BOTH, expand=True)
 
-        # Connect the scrollbar to the message listbox
         self.message_scrollbar.config(command=self.message_list.yview)
 
-        # Create a frame for the input field
-        self.input_frame = tk.Frame(self.frame, bg="#F7F7F7", bd=5)
+    def create_input_frame(self):
+        self.input_frame = tk.Frame(self.root, bg="#F7F7F7", bd=5)
         self.input_frame.pack(fill=tk.X, pady=10)
 
-        # Create an entry widget for the input field
         self.input_entry = tk.Entry(self.input_frame, font=("Helvetica", 20))
         self.input_entry.pack(fill=tk.X, expand=True, padx=5, pady=3)
-
-        # Bind the '<Return>' key to the input field
         self.input_entry.bind("<Return>", self.add_message)
-       
+
         self.style = ttk.Style()
-        self.style.configure("Round.TButton", padding=3, relief="solid", borderwidth=0,
-                              font=("Helvetica", 12), shape="circle",background="#F7F7F7", corner_radius=10)
-        
+        self.style.configure("Round.TButton", padding=3, relief="solid", borderwidth=0, font=("Helvetica", 12), shape="circle", background="#F7F7F7", corner_radius=10)
+
         self.upload_button = ttk.Button(self.input_frame, text="Upload File", style="Round.TButton", command=self.upload_file)
         self.downloadall_button = ttk.Button(self.input_frame, text="Download File", style="Round.TButton", command=self.download_all)
-        
-        # Create a button to upload a CSV file
-        self.upload_button.pack(side=tk.LEFT, pady=1, padx=1)
 
-        # DOWNLOADS
+        self.upload_button.pack(side=tk.LEFT, pady=1, padx=1)
         self.downloadall_button.pack(side=tk.RIGHT, pady=1, padx=1)
-        
+
     def upload_file(self):
         file_path = askopenfilename()
-        if file_path.endswith('.csv'):
-            self.data = pd.read_csv(file_path)
-        elif file_path.endswith('.xlsx'):
-            self.data = pd.read_excel(file_path)
+        if file_path.endswith(('.csv', '.xlsx')):
+            self.data = pd.read_csv(file_path) if file_path.endswith('.csv') else pd.read_excel(file_path)
 
-        arr = np.array(self.data.columns[0]) # convert to numpy array to avoid pandas elimination of duplicate values
-        data_list = self.data[arr].tolist()
-        
-        self.resultCSV = {}
+            arr = np.array(self.data.columns[0])
+            data_list = self.data[arr].tolist()
 
-        for index, n in enumerate(data_list, 1):
+            self.resultCSV = {}
+            for index, n in enumerate(data_list, 1):
+                isDuplicate, duplicateIndex = False, 0
 
-            isDuplicate = False
-            duplicateIndex = 0
+                if n in self.resultCSV:
+                    isDuplicate = True
+                    duplicateIndex = list(self.resultCSV.keys()).index(n)
 
-            # Check duplicate values
-            if n in self.resultCSV:
-                isDuplicate = True
-                # get the index of the duplicate value)
-                duplicateIndex = list(self.resultCSV.keys()).index(n) 
+                self.message_list.insert(tk.END, f"{index} - Validando {n}...")
+                self.message_list.see(tk.END)
+                self.root.update()
 
-            self.message_list.insert(tk.END, f"{index} - Validando {n}...")
+                status = self.check(n) if not isDuplicate else "Número duplicado."
+                self.resultCSV[duplicateIndex] = status
+                self.resultCSV[n] = status
+                print(self.resultCSV[n])
+
+                self.root.update()
+
+            self.driver.login()
+
+            self.message_list.insert(tk.END, "", f"Sua verificação terminou para {len(data_list)} numeros.", "")
+            self.message_list.insert(tk.END, "Agora você pode baixar os resultados.")
             self.message_list.see(tk.END)
             self.root.update()
 
-            if not isDuplicate:
-                status = self.check(n)
-            else:
-                status = "Número duplicado."
-                self.resultCSV[duplicateIndex] = status
-
-            self.resultCSV[n] = status
-            print(self.resultCSV[n])
-
-            self.root.update()
-
-        self.driver.login()
-
-        self.message_list.insert(tk.END, "")
-        self.message_list.insert(tk.END, f"Sua verificação terminou para {len(data_list)} numeros.")
-        self.message_list.insert(tk.END, "")
-        self.message_list.insert(tk.END, "Agora você pode baixar os resultados.")
-        self.message_list.see(tk.END)
-        self.root.update()
-
-
     def download_all(self):
-        # add the results to the dataframe
-        self.data['Status'] = self.resultCSV.values()
-        file_path = asksaveasfilename(defaultextension='.csv', initialfile='Results.csv')
-        self.data.to_csv(file_path, index=False)
-    # LOGIN
-    def checkOne(self): #switch_bindings
-        # unbind the <Return> from the old entry
+            num_rows = self.data.shape[0]  # Obtém o número total de linhas no DataFrame
+    
+             # Adiciona os valores ao DataFrame de acordo com o índice das linhas
+            for index, value in enumerate(self.resultCSV.values()):
+                if index < num_rows:
+                  self.data.at[index, 'Status'] = value
+
+            file_path = asksaveasfilename(defaultextension='.csv', initialfile='Results.csv')
+            self.data.to_csv(file_path, index=False)
+
+    def checkOne(self):
         self.input_entry.unbind("<Return>")
-
-        # create the popup
         self.popup = tk.Toplevel(self.root)
-        self.popup.title("Single Check")
-        self.popup.iconbitmap("Project\logo.ico")
-        self.popup.geometry("200x100")
-        self.popup.configure(bg='#25D366')
-        self.popup.resizable(0, 0)
+        self.setup_popup_window(self.popup, "Single Check")
 
-        # center the popup in the main window
-        x = (self.root.winfo_screenwidth() - self.popup.winfo_reqwidth()) / 2
-        y = (self.root.winfo_screenheight() - self.popup.winfo_reqheight()) / 2
-        self.popup.geometry("+%d+%d" % (x, y))
-
-        # make the main window unclickable and unmovable
-        self.popup.grab_set()
-
-        frame = tk.Frame(self.popup, bd=2, relief=tk.SUNKEN, bg='#25D366')
-        frame.pack(fill=tk.BOTH, expand=True)
-
-        # create a label for the title
-        title_label = tk.Label(frame, text="Username:", bg='#25D366', fg='white', font=("TkDefaultFont", 14))
+        title_label = tk.Label(self.popup, text="Username:", bg='#25D366', fg='white', font=("TkDefaultFont", 14))
         title_label.pack(pady=(10, 0))
 
-        # create a new entry in the popup
-        self.popup_entry = tk.Entry(frame, font=("TkDefaultFont", 14), bg='#fff', fg='black')
+        self.popup_entry = tk.Entry(self.popup, font=("TkDefaultFont", 14), bg='#fff', fg='black')
         self.popup_entry.pack()
 
-        # bind the <Return> to the new entry
         self.popup.bind("<Return>", lambda event, entry=self.popup_entry: self.popup_action(event))
 
+    def setup_popup_window(self, window, title):
+        window.title(title)
+        window.iconbitmap("Project\logo.ico")
+        window.geometry("200x100")
+        window.configure(bg='#25D366')
+        window.resizable(0, 0)
+
+        x = (self.root.winfo_screenwidth() - window.winfo_reqwidth()) / 2
+        y = (self.root.winfo_screenheight() - window.winfo_reqheight()) / 2
+        window.geometry("+%d+%d" % (x, y))
+
+        window.grab_set()
+
     def popup_action(self, event):
-        # get the text from the entry
         popup_text = self.popup_entry.get()
         self.message_list.insert(tk.END, popup_text)
-
-        # destroy the popup
         self.popup.destroy()
-
-        # bind the <Return> back to the main entry
         self.root.bind("<Return>", lambda event, entry=self.input_entry: self.add_message(event))
 
-    # Function to add message to the message list
     def add_message(self, event):
-        # Get the text from the input field
         text = self.input_entry.get()
         self.check(text)
 
     def check(self, id):
-        # For Brazil here it's 11, you can remove it but helps find errors beforehand. (can also be added a country code and use it)
         id = str(id)
-        if(len(id) < 11): 
-            number = "55" + id
-            status = self.driver.run(number)
-        #elif(len(id) > 11):
-         #   self.message_list.insert(tk.END, f"{id}: ERRO! Muitos dígitos, verifique o número e tente novamente.")
-        elif(len(id)==11):
-            number = "55" + id
-            status = self.driver.run(number)
-        elif(len(id)==13):
-            number =  id
-            status = self.driver.run(number)
-        elif(len(id))==12:
-            number =  id
-            status = self.driver.run(number)
-        elif(len(id) > 13): 
-            number = "55" + id
-            status = self.driver.run(number)
-        return status
-
-    def login(self):
-
-        self.driver.login()
-        # time.sleep(10)
-
-        # # create the popup
-        # self.popup = tk.Toplevel(self.root)
-        # self.popup.title("Login")
-        # self.popup.iconbitmap("Project\logo.ico")
-        # self.popup.geometry("300x300")
-        # self.popup.configure(bg='#25D366')
-        # self.popup.resizable(0, 0)
-
-        # # center the popup in the main window
-        # x = (self.root.winfo_screenwidth() - self.popup.winfo_reqwidth()) / 2
-        # y = (self.root.winfo_screenheight() - self.popup.winfo_reqheight()) / 2
-        # self.popup.geometry("+%d+%d" % (x, y))
-
-        # # make the main window unclickable and unmovable
-        # self.popup.grab_set()
-
-        # frame = tk.Frame(self.popup, bd=2, relief=tk.SUNKEN, bg='#25D366')
-        # frame.pack(fill=tk.BOTH, expand=True)
-
-        # image = Image.open("qr_code.png")
-        # image = image.resize((300, 300), Image.ANTIALIAS)
-        # image = ImageTk.PhotoImage(image)
+        
+        if len(id) == 11 or len(id) == 13 or len(id) == 12:
+            if len(id) == 13 or len(id) == 12:
+                number = id
+            else:
+                number = "55" + id
             
-        # self.canvas = tk.Canvas(frame, width=270, height=270)
-        # self.canvas.create_image(0, 0, anchor=tk.NW, image=image)
-        # self.canvas.pack(fill=tk.BOTH, expand=True)
+            status = self.driver.run(number)
+        else:
+            status = "Número inválido"
+        
+        return status

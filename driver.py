@@ -15,6 +15,7 @@ from selenium.common.exceptions import NoSuchElementException
 import requests
 
 
+
 class GetStatus():
     def __init__(self) -> None:
         self.options = webdriver.ChromeOptions()
@@ -49,7 +50,7 @@ class GetStatus():
 
     def test(self):
             self.count = 3
-            self.time = self.count * 2
+            self.time = self.count * 5
             try:
                 self.a = WebDriverWait(self.driver, self.time).until(EC.visibility_of_element_located((By.XPATH, '/html/body/div[1]/div/div/div[5]/div/footer/div[1]/div/span[2]/div/div[2]/div[1]/div/div[1]'))).get_attribute("title")
                 #/html/body/div[1]/div/div/div[5]/div/footer/div[1]/div/span[2]/div/div[2]/div[1]/div/div[2]
@@ -113,3 +114,6 @@ class GetStatus():
             self.chrome_options.add_argument('--headless')
             driver.execute_script("window.open('https://web.whatsapp.com');")
 
+   
+
+'''
