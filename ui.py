@@ -99,9 +99,19 @@ class UI():
             self.root.update()
 
     def download_all(self):
-        self.data['Status'] = list(self.resultCSV.values())
-        file_path = asksaveasfilename(defaultextension='.csv', initialfile='Results.csv')
-        self.data.to_csv(file_path, index=False)
+            # Verifica se o número de valores a serem atribuídos é menor ou igual ao número de linhas no DataFrame
+            num_values = len(self.resultCSV.values())
+            num_rows = self.data.shape[0]
+    
+            if num_values < num_rows:
+            # Adiciona valores vazios para corresponder ao número necessário de linhas
+                num_missing_values = num_rows - num_values
+                for _ in range(num_missing_values):
+                    self.resultCSV[''] = ''
+    
+            self.data['Status'] = list(self.resultCSV.values())
+            file_path = asksaveasfilename(defaultextension='.csv', initialfile='Results.csv')
+            self.data.to_csv(file_path, index=False)
 
     def checkOne(self):
         self.input_entry.unbind("<Return>")
