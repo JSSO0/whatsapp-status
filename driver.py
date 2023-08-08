@@ -113,7 +113,3 @@ class GetStatus():
             self.driver.close()
             self.chrome_options.add_argument('--headless')
             driver.execute_script("window.open('https://web.whatsapp.com');")
-
-   
-
-'''
