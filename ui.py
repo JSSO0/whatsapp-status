@@ -35,15 +35,6 @@ class UI():
         self.title_label = tk.Label(self.header_frame, text="WhatsApp Status", font=("Helvetica", 16), fg="white", bg="#25D366")
         self.title_label.pack(side=tk.LEFT, expand=True)
 
-        self.style = ttk.Style()
-        self.style.configure("Login.TButton", padding=3, relief="solid", borderwidth=3, font=("Helvetica", 12), background="#25D366")
-        self.login_button = ttk.Button(self.header_frame, text="Login", style="Login.TButton", command=lambda: self.login())
-        self.login_button.pack(side=tk.RIGHT)
-        
-        self.link_label = ttk.Button(self.header_frame, text="Github repository", style="Login.TButton")
-        self.link_label.pack(side=tk.RIGHT)
-        self.link_label.bind("<Button-1>", lambda event: self.driver.github())
-
     def create_message_list(self):
         self.message_frame = tk.Frame(self.root, bg="white")
         self.message_frame.pack(fill=tk.BOTH, expand=True)
@@ -149,7 +140,7 @@ class UI():
         id = str(id)
         
         if len(id) == 11 or len(id) == 13 or len(id) == 12:
-            if len(id) == 13:
+            if len(id) == 13 or len(id) == 12:
                 number = id
             else:
                 number = "55" + id
