@@ -59,7 +59,7 @@ class GetStatus():
                 except TimeoutException:                
                     if(self.count > 1):
                         self.count -= 1
-                        self.test(self)
+                        self.test()
                 except:
                     self.result = "Error." or "Erro"
                 else:
