@@ -35,7 +35,8 @@ class GetStatus():
             for cookie in self.cookies:
                 self.options.add_argument(f"--cookie={cookie['name']}={cookie['value']}")
 
-        self.driver = webdriver.Chrome(ChromeDriverManager().install(), options=self.options)
+        self.driver = webdriver.Chrome(options=self.options)
+        #self.driver = webdriver.Chrome(ChromeDriverManager().install(), options=self.options)
         self.driver.get("https://web.whatsapp.com/")
 
     def save_cookies(self):
@@ -48,7 +49,7 @@ class GetStatus():
 
 
     def test(self):
-            self.count = 3
+            self.count = 4
             self.time = self.count *2
             try:
                 self.a = WebDriverWait(self.driver, self.time).until(EC.visibility_of_element_located((By.XPATH, '/html/body/div[1]/div/div/div[5]/div/footer/div[1]/div/span[2]/div/div[2]/div[1]/div/div[1]'))).get_attribute("title")
